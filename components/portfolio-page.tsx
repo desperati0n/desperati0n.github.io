@@ -1,23 +1,28 @@
 'use client';
 
 import { useGSAP } from '@gsap/react';
-import { AnimatePresence, motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { DocumentLanguage } from '@/components/document-language';
+import { ShaderBackground } from '@/components/ui/liquid-metal';
+import ParticlesBackground from '@/components/ui/particles-bg';
+import { ChromeLink } from '@/components/ui/chrome-button';
+import { LiquidMetalButton, LiquidMetalLink } from '@/components/ui/liquid-metal-button';
+import { GithubProfilePanel } from '@/components/ui/github-profile-panel';
+import { InlineTextReveal } from '@/components/ui/text-reveal';
+import { Dock, DockItem } from '@/components/ui/dock';
+import { AnimatePresence, motion, useMotionValue, useSpring } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import {
   ArrowDownRight,
   ArrowLeft,
   ArrowRight,
-  Binary,
-  Braces,
+  Award,
+  BriefcaseBusiness,
   Code2,
-  Cpu,
+  GraduationCap,
   Home,
   Layers3,
   Mail,
-  Network,
-  Radio,
-  Terminal,
   UserRound,
 } from 'lucide-react';
 import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent, type ReactNode } from 'react';
@@ -26,114 +31,229 @@ if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger, useGSAP);
 }
 
-const navItems = [
-  { name: '首页', href: '#home', icon: Home },
-  { name: '关于', href: '#about', icon: UserRound },
-  { name: '项目', href: '#projects', icon: Layers3 },
-  { name: '联系', href: '#contact', icon: Mail },
-];
+export type PortfolioLocale = 'en' | 'zh';
 
-const skills = [
-  'TypeScript',
-  'React',
-  'Next.js',
-  'Python',
-  'PyTorch',
-  'Node.js',
-  'PostgreSQL',
-  'Docker',
-  'Git',
-  'GSAP',
-];
+const siteContent = {
+  en: {
+    nav: [
+      { name: 'Home', href: '#home', icon: Home },
+      { name: 'About', href: '#about', icon: UserRound },
+      { name: 'Projects', href: '#projects', icon: Layers3 },
+      { name: 'Contact', href: '#contact', icon: Mail },
+    ],
+    languageHref: '/zh',
+    languageLabel: 'View in Chinese',
+    languageShort: '中文',
+    projects: [
+      {
+        title: 'bacterial-segmentation-benchmark',
+        description: 'A unified evaluation of Cellpose-SAM, MicroSAM DeepBacs, and Omnipose, followed by deployment of the selected model as a callable GPU inference service.',
+        href: '/projects#bacterial-segmentation',
+        language: 'Python',
+      },
+      {
+        title: 'ticket_service',
+        description: 'An asynchronous IT ticketing pipeline built with FastAPI, Redis Streams, and multiple databases, with an eight-tool MCP service.',
+        href: '/projects#ticket-service',
+        language: 'Python',
+      },
+      {
+        title: 'rag-agent-tutorial',
+        description: 'An end-to-end RAG agent covering multi-format parsing, vector retrieval, reranking, and multi-turn tool calling.',
+        href: '/projects#rag-agent',
+        language: 'Python',
+      },
+    ],
+    story: 'My main interest is artificial intelligence. I enjoy learning through hands-on projects and exploring how ideas can become useful systems.',
+    aboutTitle: 'About',
+    stats: [
+      ['3.57', '/ 4.0', 'CGPA', ''],
+      ['2028', '', 'Expected graduation', 'Computer Science undergraduate'],
+      ['OPEN', '', 'Current status', 'Seeking AI / backend internships'],
+    ],
+    highlights: [
+      {
+        label: 'EDUCATION',
+        period: 'SEP 2024 — JUL 2028 (EXPECTED)',
+        title: 'Xiamen University Malaysia',
+        summary: 'Undergraduate Student in Computer Science and Technology, CGPA 3.57 / 4.00; studying in an English-medium programme.',
+        icon: GraduationCap,
+      },
+      {
+        label: 'INTERNSHIP',
+        period: 'AUG — SEP 2026',
+        title: 'Huiming Alpha Tech',
+        summary: 'AI Engineering Intern in the R&D Department, working on computer vision evaluation and deployment, an IT ticketing agent, and an MCP platform.',
+        icon: BriefcaseBusiness,
+      },
+      {
+        label: 'HONOUR',
+        period: 'SEP 2025 SEMESTER',
+        title: "Dean's List Award",
+        summary: 'School of Computing and Data Science, Xiamen University Malaysia.',
+        icon: Award,
+      },
+    ],
+    skillsIntro: 'A practical stack spanning AI capabilities and backend infrastructure.',
+    skills: [
+      {
+        index: 'A',
+        title: 'Programming & Backend',
+        text: 'I build server-side applications with Python, C/C++, and SQL, using FastAPI, Pydantic, SQLAlchemy, SSE, and REST APIs.',
+        detail: 'PYTHON / C++ / FASTAPI / SQL',
+      },
+      {
+        index: 'B',
+        title: 'AI Applications',
+        text: 'I develop practical AI applications around RAG, embeddings, reranking, LangChain, tool calling, and MCP.',
+        detail: 'RAG / LANGCHAIN / TOOL CALLING / MCP',
+      },
+      {
+        index: 'C',
+        title: 'Data & Engineering',
+        text: 'I work with MySQL, MongoDB, Redis Streams, and ChromaDB, and package projects with Docker Compose, Git/GitHub, and Linux.',
+        detail: 'MYSQL / REDIS / DOCKER / LINUX',
+      },
+    ],
+    previous: 'Previous skill',
+    next: 'Next skill',
+    heroTitle: 'Welcome to my portfolio.',
+    heroBody: 'I’m Qian Cheng, a Computer Science undergraduate.',
+    projectsCta: 'View projects',
+    footerKicker: 'OPEN TO AI & BACKEND INTERNSHIPS',
+    backToTop: 'Back to top',
+  },
+  zh: {
+    nav: [
+      { name: '首页', href: '#home', icon: Home },
+      { name: '关于', href: '#about', icon: UserRound },
+      { name: '项目', href: '#projects', icon: Layers3 },
+      { name: '联系', href: '#contact', icon: Mail },
+    ],
+    languageHref: '/',
+    languageLabel: 'View in English',
+    languageShort: 'EN',
+    projects: [
+      {
+        title: 'bacterial-segmentation-benchmark',
+        description: '统一评测 Cellpose-SAM、MicroSAM DeepBacs 与 Omnipose，并将优选模型封装为可调用的 GPU 推理服务。',
+        href: '/zh/projects#bacterial-segmentation',
+        language: 'Python',
+      },
+      {
+        title: 'ticket_service',
+        description: '基于 FastAPI、Redis Streams 与多数据库构建异步 IT 工单链路，并重构为 8 工具 MCP 服务。',
+        href: '/zh/projects#ticket-service',
+        language: 'Python',
+      },
+      {
+        title: 'rag-agent-tutorial',
+        description: '覆盖多格式文档解析、向量召回、Reranker 精排与多轮 Tool Calling 的完整 RAG Agent 链路。',
+        href: '/zh/projects#rag-agent',
+        language: 'Python',
+      },
+    ],
+    story: '我对人工智能很感兴趣，希望未来继续在 AI 方向发展。平时主要通过课程、开源项目和实际开发学习，最近在做 RAG、Agent、MCP 和计算机视觉相关项目。',
+    aboutTitle: '关于我',
+    stats: [
+      ['3.57', '/ 4.0', 'CGPA', ''],
+      ['2028', '', '预计毕业', '计算机科学本科'],
+      ['OPEN', '', '当前状态', '寻找 AI / 后端实习'],
+    ],
+    highlights: [
+      {
+        label: '教育',
+        period: '2024.09 — 2028.07（预计）',
+        title: '厦门大学马来西亚分校',
+        summary: '计算机科学与技术本科，CGPA 3.57 / 4.0；全英文授课，IELTS 6.0。',
+        icon: GraduationCap,
+      },
+      {
+        label: '实习',
+        period: '2026.08 — 2026.09',
+        title: '深圳市慧明信息科技有限公司',
+        summary: '研发部 AI 开发工程师，参与计算机视觉评测部署、工单 Agent 与 MCP 平台建设。',
+        icon: BriefcaseBusiness,
+      },
+      {
+        label: '荣誉',
+        period: '2025/09 SEMESTER',
+        title: "Dean's List Award",
+        summary: '厦门大学马来西亚分校 School of Computing and Data Science。',
+        icon: Award,
+      },
+    ],
+    skillsIntro: '从 AI 能力到后端基础设施的技术栈。',
+    skills: [
+      {
+        index: 'A',
+        title: '编程与后端',
+        text: '使用 Python、C/C++ 与 SQL 开发服务端应用，熟悉 FastAPI、Pydantic、SQLAlchemy、SSE 与 REST API。',
+        detail: 'PYTHON / C++ / FASTAPI / SQL',
+      },
+      {
+        index: 'B',
+        title: 'AI 应用',
+        text: '围绕 RAG、Embedding、Reranker、LangChain、Tool Calling 与 MCP 构建可落地的智能应用。',
+        detail: 'RAG / LANGCHAIN / TOOL CALLING / MCP',
+      },
+      {
+        index: 'C',
+        title: '数据与工程',
+        text: '具备 MySQL、MongoDB、Redis Streams 与 ChromaDB 使用经验，并通过 Docker Compose、Git/GitHub 与 Linux 完成交付。',
+        detail: 'MYSQL / REDIS / DOCKER / LINUX',
+      },
+    ],
+    previous: '上一条',
+    next: '下一条',
+    heroTitle: '你好，欢迎来到我的个人简介。',
+    heroBody: '钱程，厦门大学马来西亚分校计算机科学本科生。关注 AI Agent、RAG、MCP 与可靠后端系统。',
+    projectsCta: '查看项目',
+    footerKicker: 'OPEN TO AI & BACKEND INTERNSHIPS',
+    backToTop: '回到顶部',
+  },
+};
 
-const projects = [
-  {
-    title: 'Neural Canvas',
-    description: '把自然语言转化为可编辑节点图的生成式 AI 工作台，支持实时协作与版本回溯。',
-    stack: ['React', 'FastAPI', 'WebSocket'],
-    metric: '98ms',
-    metricLabel: '交互延迟',
-    image: 'https://picsum.photos/seed/neural-interface/1400/900',
-    span: 'md:col-span-7',
-    icon: Network,
-  },
-  {
-    title: 'Tiny Compiler',
-    description: '从词法分析到 WebAssembly 输出的教学编译器，附带可视化 AST 调试器。',
-    stack: ['Rust', 'WASM', 'AST'],
-    metric: '14k',
-    metricLabel: '行测试代码',
-    span: 'md:col-span-5',
-    icon: Binary,
-  },
-  {
-    title: 'Signal Lab',
-    description: '面向校园实验室的边缘设备监测系统，统一采集、异常检测与告警链路。',
-    stack: ['Python', 'MQTT', 'Docker'],
-    metric: '32',
-    metricLabel: '在线设备',
-    span: 'md:col-span-5',
-    icon: Radio,
-  },
-  {
-    title: 'Distributed Notes',
-    description: '离线优先的知识库实验，探索 CRDT、端到端加密与多端无冲突同步。',
-    stack: ['CRDT', 'IndexedDB', 'P2P'],
-    metric: '0',
-    metricLabel: '同步冲突',
-    image: 'https://picsum.photos/seed/distributed-system/1400/900',
-    span: 'md:col-span-7',
-    icon: Braces,
-  },
-];
+function PortfolioDock({ locale }: { locale: PortfolioLocale }) {
+  const content = siteContent[locale];
+  const navItems = content.nav;
+  const [activeHref, setActiveHref] = useState(navItems[0].href);
 
-const experiences = [
-  {
-    range: '2025 — 现在',
-    title: 'HCI LAB',
-    role: '前端研发实习生',
-    copy: '参与多模态交互原型研发，将研究算法转化为可被真实用户验证的产品界面。',
-    tags: ['React', 'WebGL', 'Research'],
-  },
-  {
-    range: '2024 — 2025',
-    title: 'CAMPUS OSS',
-    role: '开源项目维护者',
-    copy: '维护校园服务开源工具，重构核心状态层并建立自动化测试与发布流程。',
-    tags: ['TypeScript', 'CI/CD', 'Testing'],
-  },
-  {
-    range: '2023 — 2024',
-    title: 'ACM STUDIO',
-    role: '学生开发者',
-    copy: '为程序设计训练平台开发实时判题状态与数据可视化，服务校内训练队。',
-    tags: ['Algorithms', 'Node.js', 'PostgreSQL'],
-  },
-];
+  useEffect(() => {
+    let frameId: number | null = null;
 
-const principles = [
-  {
-    index: 'A',
-    title: '清晰优于炫技',
-    text: '真正好的工程会把复杂度留在内部，把清晰、快速且可预期的体验交给使用者。',
-    detail: 'CLARITY / SYSTEMS THINKING',
-  },
-  {
-    index: 'B',
-    title: '速度来自结构',
-    text: '我重视组件边界、类型约束与反馈回路。它们让快速迭代不再以技术债为代价。',
-    detail: 'ARCHITECTURE / ITERATION',
-  },
-  {
-    index: 'C',
-    title: '好奇心驱动工程',
-    text: '从编译器到生成式 AI，我享受拆开黑盒、理解原理，再把知识做成真实产品。',
-    detail: 'CURIOSITY / CRAFT',
-  },
-];
+    const updateActiveItem = () => {
+      frameId = null;
+      const viewportMarker = window.innerHeight * 0.35;
+      let nextActiveHref = navItems[0].href;
 
-function TubeLightNav() {
-  const [active, setActive] = useState('首页');
+      navItems.forEach((item) => {
+        if (!item.href.startsWith('#')) return;
+        const section = document.querySelector<HTMLElement>(item.href);
+        if (section && section.getBoundingClientRect().top <= viewportMarker) {
+          nextActiveHref = item.href;
+        }
+      });
+
+      setActiveHref((current) => (current === nextActiveHref ? current : nextActiveHref));
+    };
+
+    const scheduleUpdate = () => {
+      if (frameId === null) {
+        frameId = window.requestAnimationFrame(updateActiveItem);
+      }
+    };
+
+    updateActiveItem();
+    window.addEventListener('scroll', scheduleUpdate, { passive: true });
+    window.addEventListener('resize', scheduleUpdate);
+
+    return () => {
+      window.removeEventListener('scroll', scheduleUpdate);
+      window.removeEventListener('resize', scheduleUpdate);
+      if (frameId !== null) window.cancelAnimationFrame(frameId);
+    };
+  }, []);
 
   return (
     <motion.nav
@@ -141,69 +261,40 @@ function TubeLightNav() {
       animate={{ y: 0, opacity: 1 }}
       transition={{ type: 'spring', stiffness: 110, damping: 18, delay: 0.3 }}
       className="fixed left-1/2 top-5 z-50 -translate-x-1/2"
-      aria-label="主导航"
+      aria-label={locale === 'en' ? 'Primary navigation' : '主导航'}
     >
-      <div className="flex items-center gap-1 rounded-full border border-white/10 bg-black/70 p-1.5 shadow-2xl shadow-black/50 backdrop-blur-xl">
+      <Dock>
         {navItems.map((item) => {
           const Icon = item.icon;
-          const selected = active === item.name;
+          const selected = activeHref === item.href;
           return (
-            <a
-              key={item.name}
-              href={item.href}
-              onClick={() => setActive(item.name)}
-              className="group relative flex h-10 items-center gap-2 rounded-full px-3 text-sm text-white/55 transition-colors duration-300 hover:text-white"
-            >
-              {selected && (
-                <motion.span layoutId="nav-light" className="absolute inset-0 -z-10 rounded-full bg-white/10">
-                  <span className="absolute -top-1 left-1/2 h-1 w-8 -translate-x-1/2 rounded-full bg-cyan-300 shadow-[0_0_14px_3px_rgba(103,232,249,.7)]" />
-                </motion.span>
-              )}
-              <Icon className="h-4 w-4" strokeWidth={1.7} />
-              <span className="hidden sm:inline">{item.name}</span>
-            </a>
+            <DockItem key={item.name} active={selected} label={item.name}>
+              <a
+                href={item.href}
+                aria-label={item.name}
+                aria-current={selected ? 'page' : undefined}
+                className={`flex size-full items-center justify-center rounded-full outline-none transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-white/65 ${selected ? 'text-white' : 'text-white/55'}`}
+              >
+                <Icon className="h-5 w-5" strokeWidth={1.7} />
+              </a>
+            </DockItem>
           );
         })}
-      </div>
+        <span
+          aria-hidden="true"
+          className="h-6 w-px shrink-0 self-center bg-white/20"
+        />
+        <DockItem label={content.languageLabel}>
+          <a
+            href={content.languageHref}
+            aria-label={content.languageLabel}
+            className="flex size-full items-center justify-center rounded-full text-[11px] font-semibold tracking-wide text-white/70 outline-none transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-white/65"
+          >
+            {content.languageShort}
+          </a>
+        </DockItem>
+      </Dock>
     </motion.nav>
-  );
-}
-
-function CursorField() {
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const smoothX = useSpring(x, { stiffness: 90, damping: 22, mass: 0.5 });
-  const smoothY = useSpring(y, { stiffness: 90, damping: 22, mass: 0.5 });
-  const rotateX = useTransform(smoothY, [-400, 400], [9, -9]);
-  const rotateY = useTransform(smoothX, [-700, 700], [-11, 11]);
-
-  useEffect(() => {
-    const onMove = (event: PointerEvent) => {
-      x.set(event.clientX - window.innerWidth / 2);
-      y.set(event.clientY - window.innerHeight / 2);
-    };
-    window.addEventListener('pointermove', onMove);
-    return () => window.removeEventListener('pointermove', onMove);
-  }, [x, y]);
-
-  return (
-    <motion.div
-      aria-hidden="true"
-      style={{ rotateX, rotateY, transformPerspective: 900 }}
-      className="hero-machine absolute inset-x-[6%] bottom-[-18%] top-[42%]"
-    >
-      <div className="absolute inset-0 rounded-[50%] border border-white/10 bg-[radial-gradient(circle_at_50%_10%,rgba(255,255,255,.14),transparent_42%)] shadow-[inset_0_1px_0_rgba(255,255,255,.13),0_-30px_100px_rgba(34,211,238,.08)]" />
-      <motion.div
-        animate={{ rotate: 360 }}
-        transition={{ duration: 24, ease: 'linear', repeat: Infinity }}
-        className="absolute left-1/2 top-[12%] h-40 w-40 -translate-x-1/2 rounded-full border border-dashed border-cyan-200/30 sm:h-56 sm:w-56"
-      >
-        <div className="absolute left-1/2 top-[-6px] h-3 w-3 -translate-x-1/2 rounded-full bg-cyan-200 shadow-[0_0_28px_8px_rgba(103,232,249,.55)]" />
-      </motion.div>
-      <div className="absolute left-1/2 top-[21%] grid h-24 w-24 -translate-x-1/2 place-items-center rounded-3xl border border-white/15 bg-black/70 shadow-2xl backdrop-blur-md sm:h-32 sm:w-32">
-        <Code2 className="h-10 w-10 text-white sm:h-14 sm:w-14" strokeWidth={1.1} />
-      </div>
-    </motion.div>
   );
 }
 
@@ -220,64 +311,65 @@ function MagneticLink({ href, children, primary = false }: { href: string; child
   }
 
   return (
-    <motion.a
-      href={href}
-      onPointerMove={move}
-      onPointerLeave={() => {
-        x.set(0);
-        y.set(0);
-      }}
-      style={{ x: springX, y: springY }}
-      className={
-        primary
-          ? 'group flex items-center justify-center gap-3 rounded-full bg-white px-6 py-3.5 text-sm font-semibold text-black'
-          : 'flex items-center justify-center rounded-full border border-white/15 bg-white/5 px-6 py-3.5 text-sm font-semibold text-white backdrop-blur transition-colors hover:bg-white/10'
-      }
-    >
-      {children}
-    </motion.a>
+    <motion.div style={{ x: springX, y: springY }} className="inline-block">
+      <ChromeLink
+        href={href}
+        onPointerMove={move}
+        onPointerLeave={() => {
+          x.set(0);
+          y.set(0);
+        }}
+        className={primary ? 'group min-w-[168px]' : 'group'}
+      >
+        {children}
+      </ChromeLink>
+    </motion.div>
   );
 }
 
-function SkillMarquee() {
-  const row = [...skills, ...skills];
-  return (
-    <div className="relative overflow-hidden border-y border-white/10 py-5 [mask-image:linear-gradient(to_right,transparent,black_12%,black_88%,transparent)]">
-      <div className="marquee-track flex w-max items-center">
-        {row.map((skill, index) => (
-          <div key={`${skill}-${index}`} className="flex items-center gap-7 pr-7 font-mono text-sm tracking-[0.16em] text-white/48">
-            <span>{skill.toUpperCase()}</span>
-            <span className="h-1.5 w-1.5 rounded-full bg-cyan-200/75 shadow-[0_0_12px_rgba(103,232,249,.7)]" />
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+function SectionFade() {
+  return <div aria-hidden="true" className="relative z-20 -mt-px h-32 bg-gradient-to-b from-black via-black/85 to-transparent" />;
 }
 
-function StorySection() {
+function StorySection({ locale }: { locale: PortfolioLocale }) {
+  const content = siteContent[locale];
   const root = useRef<HTMLElement>(null);
   const title = useRef<HTMLDivElement>(null);
-  const words = '我相信代码不只需要正确运行，也应该让人感到自然。我在计算机科学的严谨与设计的感知之间工作，把复杂系统拆成清晰、可靠、值得信任的体验。'.split('');
+  const story = useRef<HTMLParagraphElement>(null);
+  const words = locale === 'en' ? content.story.split(/(\s+)/) : content.story.split('');
 
   useGSAP(
     () => {
       const letters = gsap.utils.toArray<HTMLElement>('[data-reveal-letter]');
-      gsap.fromTo(
-        letters,
-        { opacity: 0.1 },
-        {
-          opacity: 1,
-          stagger: 0.05,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: root.current,
-            start: 'top 65%',
-            end: 'bottom 72%',
-            scrub: 1,
-          },
+      const reveal = gsap.timeline({
+        scrollTrigger: {
+          trigger: story.current,
+          start: 'top 32%',
+          end: () => `+=${window.innerHeight * 1.25}`,
+          scrub: 0.7,
+          pin: story.current,
+          pinSpacing: true,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
         },
-      );
+      });
+
+      reveal
+        .fromTo(
+          letters,
+          { opacity: 0.1 },
+          {
+            opacity: 0.1,
+            duration: 0.14,
+          },
+        )
+        .to(letters, {
+          opacity: 1,
+          duration: 0.28,
+          stagger: { amount: 0.72, from: 'start' },
+          ease: 'none',
+        })
+        .to(letters, { opacity: 1, duration: 0.14 });
 
       const media = gsap.matchMedia();
       media.add('(min-width: 768px)', () => {
@@ -297,14 +389,11 @@ function StorySection() {
   return (
     <section ref={root} id="about" className="relative mx-auto grid min-h-[145vh] max-w-7xl gap-16 px-5 py-32 md:grid-cols-[0.8fr_1.7fr] md:px-10 md:py-48">
       <div ref={title} className="h-fit">
-        <p className="font-mono text-sm tracking-[0.18em] text-cyan-200/70">WHO I AM</p>
-        <h2 className="mt-5 max-w-sm text-4xl font-medium leading-[0.95] tracking-[-0.05em] sm:text-6xl">
-          逻辑之外，
-          <span className="text-white/30">仍然是人。</span>
-        </h2>
+        <p className="font-mono text-sm tracking-[0.18em] text-white/60">WHO I AM</p>
+        <h2 className="mt-5 max-w-sm text-4xl font-medium leading-[0.95] tracking-[-0.05em] sm:text-6xl">{content.aboutTitle}</h2>
       </div>
       <div className="flex flex-col justify-between gap-24 md:pt-[16vh]">
-        <p className="max-w-4xl text-[clamp(2rem,4.5vw,4.6rem)] font-medium leading-[1.04] tracking-[-0.045em]">
+        <p ref={story} className="max-w-4xl text-[clamp(2rem,4.5vw,4.6rem)] font-medium leading-[1.04] tracking-[-0.045em]">
           {words.map((letter, index) => (
             <span key={`${letter}-${index}`} data-reveal-letter className="will-change-opacity">
               {letter}
@@ -312,191 +401,75 @@ function StorySection() {
           ))}
         </p>
         <div className="grid max-w-3xl gap-px overflow-hidden rounded-3xl border border-white/10 bg-white/10 sm:grid-cols-3">
-          {[
-            ['CS', '主修方向', '计算机科学'],
-            ['2026', '预计毕业', '本科'],
-            ['OPEN', '当前状态', '寻找实习'],
-          ].map(([value, label, note]) => (
+          {content.stats.map(([value, suffix, label, note]) => (
             <div key={label} className="bg-black p-7">
-              <p className="text-3xl font-medium tracking-tight">{value}</p>
+              <p className="text-3xl font-medium tracking-tight">
+                {value}
+                {suffix && <span className="text-base font-normal text-white/55">{suffix}</span>}
+              </p>
               <p className="mt-7 text-sm text-white/40">{label}</p>
-              <p className="mt-1 text-sm text-white/75">{note}</p>
+              {note && <p className="mt-1 text-sm text-white/75">{note}</p>}
             </div>
           ))}
         </div>
+        <div className="grid max-w-4xl gap-4">
+          {content.highlights.map((item) => {
+            const Icon = item.icon;
+            return (
+              <article key={item.label} className="group grid gap-6 rounded-3xl border border-white/10 bg-[#08090a]/82 p-6 transition-colors hover:border-white/20 sm:grid-cols-[10rem_1fr] sm:p-8">
+                <div>
+                  <div className="flex items-center gap-3 text-white/45">
+                    <Icon className="size-5" strokeWidth={1.5} />
+                    <span className="font-mono text-xs tracking-[0.16em]">{item.label}</span>
+                  </div>
+                  <p className="mt-4 font-mono text-xs leading-5 text-white/30">{item.period}</p>
+                </div>
+                <div>
+                  <h3 className="text-2xl font-medium tracking-[-0.035em] sm:text-3xl">{item.title}</h3>
+                  <p className="mt-3 max-w-2xl text-base leading-7 text-white/52">{item.summary}</p>
+                </div>
+              </article>
+            );
+          })}
+        </div>
       </div>
     </section>
   );
 }
 
-function PhysicsCard({ project, index }: { project: (typeof projects)[number]; index: number }) {
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [6, -6]), { stiffness: 180, damping: 24 });
-  const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-7, 7]), { stiffness: 180, damping: 24 });
-  const glowX = useTransform(x, [-0.5, 0.5], ['15%', '85%']);
-  const glowY = useTransform(y, [-0.5, 0.5], ['15%', '85%']);
-  const Icon = project.icon;
-
-  function move(event: ReactPointerEvent<HTMLElement>) {
-    const box = event.currentTarget.getBoundingClientRect();
-    x.set((event.clientX - box.left) / box.width - 0.5);
-    y.set((event.clientY - box.top) / box.height - 0.5);
-  }
-
-  return (
-    <motion.article
-      onPointerMove={move}
-      onPointerLeave={() => {
-        x.set(0);
-        y.set(0);
-      }}
-      style={{ rotateX, rotateY, transformPerspective: 1000 }}
-      className={`project-card group relative min-h-[380px] overflow-hidden bg-[#08090a] p-7 sm:p-9 ${project.span}`}
-    >
-      {project.image && (
-        <img
-          src={project.image}
-          alt=""
-          className="absolute inset-0 h-full w-full object-cover opacity-25 grayscale contrast-125 transition-transform duration-700 ease-out group-hover:scale-105"
-        />
-      )}
-      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent" />
-      <motion.div
-        aria-hidden="true"
-        style={{ left: glowX, top: glowY }}
-        className="pointer-events-none absolute h-56 w-56 -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-200/[0.065] blur-3xl"
-      />
-      <div className="relative flex h-full flex-col">
-        <div className="flex items-start justify-between">
-          <span className="grid h-12 w-12 place-items-center rounded-2xl border border-white/10 bg-black/40 backdrop-blur">
-            <Icon className="h-5 w-5 text-cyan-100" strokeWidth={1.4} />
-          </span>
-          <span className="font-mono text-xs text-white/30">0{index + 1}</span>
-        </div>
-        <div className="mt-auto max-w-2xl pt-20">
-          <div className="mb-7 flex items-end justify-between gap-6">
-            <h3 className="text-3xl font-medium tracking-[-0.04em] sm:text-5xl">{project.title}</h3>
-            <div className="hidden text-right sm:block">
-              <p className="text-2xl font-medium">{project.metric}</p>
-              <p className="text-xs text-white/35">{project.metricLabel}</p>
-            </div>
-          </div>
-          <p className="max-w-xl text-base leading-relaxed text-white/52">{project.description}</p>
-          <div className="mt-7 flex flex-wrap gap-2">
-            {project.stack.map((item) => (
-              <span key={item} className="rounded-full border border-white/10 bg-white/[0.035] px-3 py-1.5 font-mono text-xs text-white/55">
-                {item}
-              </span>
-            ))}
-          </div>
-        </div>
-      </div>
-    </motion.article>
-  );
-}
-
-function ProjectsSection() {
+function ProjectsSection({ locale }: { locale: PortfolioLocale }) {
+  const content = siteContent[locale];
   return (
     <section id="projects" className="chapter mx-auto max-w-7xl px-5 py-32 md:px-10 md:py-48">
-      <div className="mb-16 flex flex-col justify-between gap-8 sm:flex-row sm:items-end">
-        <div>
-          <p className="font-mono text-sm tracking-[0.18em] text-cyan-200/70">SELECTED WORK</p>
-          <h2 className="mt-5 max-w-3xl text-5xl font-medium leading-[0.93] tracking-[-0.055em] sm:text-7xl">把问题做成可以被使用的答案。</h2>
-        </div>
-        <p className="max-w-xs text-sm leading-relaxed text-white/42">选择卡片并移动鼠标，查看弹簧阻尼与空间高光如何响应。</p>
-      </div>
-      <div className="grid grid-flow-dense grid-cols-1 gap-px overflow-hidden rounded-[2rem] border border-white/10 bg-white/10 md:grid-cols-12 md:grid-rows-2">
-        {projects.map((project, index) => (
-          <PhysicsCard key={project.title} project={project} index={index} />
-        ))}
-      </div>
+      <GithubProfilePanel projects={content.projects} locale={locale} />
     </section>
   );
 }
 
-function ExperienceAccordion() {
-  const [active, setActive] = useState(0);
-
-  return (
-    <section className="chapter mx-auto max-w-7xl px-5 py-32 md:px-10 md:py-48">
-      <div className="mb-16 max-w-4xl">
-        <p className="font-mono text-sm tracking-[0.18em] text-cyan-200/70">EXPERIENCE</p>
-        <h2 className="mt-5 text-5xl font-medium leading-[0.95] tracking-[-0.055em] sm:text-7xl">经验不是时间线，是不断扩大的问题边界。</h2>
-      </div>
-      <div className="flex min-h-[640px] flex-col gap-2 md:min-h-[520px] md:flex-row">
-        {experiences.map((item, index) => {
-          const selected = active === index;
-          return (
-            <button
-              key={item.title}
-              type="button"
-              onMouseEnter={() => setActive(index)}
-              onFocus={() => setActive(index)}
-              onClick={() => setActive(index)}
-              className={`experience-panel group relative overflow-hidden rounded-[1.75rem] border border-white/10 p-7 text-left transition-[flex] duration-700 ease-[cubic-bezier(.2,.8,.2,1)] md:p-9 ${selected ? 'flex-[3.6]' : 'flex-1'}`}
-              aria-expanded={selected}
-            >
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_0%,rgba(103,232,249,.09),transparent_38%)] opacity-0 transition-opacity duration-700 group-hover:opacity-100" />
-              <div className="relative flex h-full min-h-[150px] flex-col">
-                <div className="flex items-start justify-between gap-6">
-                  <p className="font-mono text-xs tracking-[0.12em] text-white/36">{item.range}</p>
-                  <ArrowDownRight className={`h-5 w-5 text-cyan-100 transition-transform duration-500 ${selected ? 'rotate-45' : ''}`} />
-                </div>
-                <div className="mt-auto pt-16">
-                  <h3 className="text-3xl font-medium tracking-[-0.04em] sm:text-4xl">{item.title}</h3>
-                  <p className="mt-2 text-sm text-cyan-100/65">{item.role}</p>
-                  <AnimatePresence initial={false}>
-                    {selected && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 18 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 8 }}
-                        transition={{ duration: 0.42, delay: 0.12 }}
-                      >
-                        <p className="mt-7 max-w-lg text-base leading-relaxed text-white/50">{item.copy}</p>
-                        <div className="mt-6 flex flex-wrap gap-2">
-                          {item.tags.map((tag) => (
-                            <span key={tag} className="rounded-full border border-white/10 px-3 py-1 font-mono text-xs text-white/45">
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              </div>
-            </button>
-          );
-        })}
-      </div>
-    </section>
-  );
-}
-
-function PrinciplesCarousel() {
+function SkillsCarousel({ locale }: { locale: PortfolioLocale }) {
+  const content = siteContent[locale];
+  const skillGroups = content.skills;
   const [current, setCurrent] = useState(0);
-  const item = principles[current];
+  const item = skillGroups[current];
 
   function step(direction: number) {
-    setCurrent((value) => (value + direction + principles.length) % principles.length);
+    setCurrent((value) => (value + direction + skillGroups.length) % skillGroups.length);
   }
 
   return (
     <section className="chapter relative overflow-hidden py-32 md:py-48">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_72%_50%,rgba(103,232,249,.06),transparent_32%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_72%_50%,rgba(255,255,255,.05),transparent_32%)]" />
       <div className="relative mx-auto grid max-w-7xl gap-16 px-5 md:grid-cols-[0.8fr_1.6fr] md:px-10">
         <div>
-          <p className="font-mono text-sm tracking-[0.18em] text-cyan-200/70">HOW I WORK</p>
-          <p className="mt-5 max-w-xs text-base leading-relaxed text-white/43">驱动我做出判断的三条工程原则。</p>
+          <p className="font-mono text-sm tracking-[0.18em] text-white/60">TECH STACK</p>
+          <p className="mt-5 max-w-xs text-base leading-relaxed text-white/43">{content.skillsIntro}</p>
           <div className="mt-10 flex gap-3">
-            <button type="button" onClick={() => step(-1)} aria-label="上一条" className="grid h-12 w-12 place-items-center rounded-full border border-white/12 text-white/65 transition-colors hover:bg-white hover:text-black">
+            <LiquidMetalButton type="button" onClick={() => step(-1)} aria-label={content.previous} variant="icon" size="icon" className="h-12 w-12 text-white/65">
               <ArrowLeft className="h-4 w-4" />
-            </button>
-            <button type="button" onClick={() => step(1)} aria-label="下一条" className="grid h-12 w-12 place-items-center rounded-full border border-white/12 text-white/65 transition-colors hover:bg-white hover:text-black">
+            </LiquidMetalButton>
+            <LiquidMetalButton type="button" onClick={() => step(1)} aria-label={content.next} variant="icon" size="icon" className="h-12 w-12 text-white/65">
               <ArrowRight className="h-4 w-4" />
-            </button>
+            </LiquidMetalButton>
           </div>
         </div>
         <div className="min-h-[360px] overflow-hidden">
@@ -509,9 +482,9 @@ function PrinciplesCarousel() {
               transition={{ duration: 0.6, ease: [0.2, 0.8, 0.2, 1] }}
             >
               <span className="font-mono text-sm text-white/25">{item.index} / C</span>
-              <h2 className="mt-8 text-[clamp(3.4rem,7.5vw,7.6rem)] font-medium leading-[0.88] tracking-[-0.065em]">{item.title}</h2>
+              <h2 className="mt-8 text-[clamp(3rem,7vw,7.2rem)] font-medium leading-[0.88] tracking-[-0.06em]">{item.title}</h2>
               <p className="mt-9 max-w-2xl text-lg leading-relaxed text-white/52 sm:text-xl">{item.text}</p>
-              <p className="mt-9 font-mono text-xs tracking-[0.14em] text-cyan-200/55">{item.detail}</p>
+              <p className="mt-9 font-mono text-xs tracking-[0.14em] text-white/45">{item.detail}</p>
             </motion.div>
           </AnimatePresence>
         </div>
@@ -520,35 +493,34 @@ function PrinciplesCarousel() {
   );
 }
 
-function MotionFooter() {
+function MotionFooter({ locale }: { locale: PortfolioLocale }) {
+  const content = siteContent[locale];
   return (
-    <footer id="contact" className="relative min-h-screen overflow-hidden border-t border-white/10 bg-[#050606] px-5 pb-8 pt-32 md:px-10 md:pt-48">
-      <div className="footer-orbit absolute left-1/2 top-1/2 h-[65vw] w-[65vw] min-h-[620px] min-w-[620px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/[0.06]" />
-      <div className="absolute left-1/2 top-1/2 h-[42vw] w-[42vw] min-h-[400px] min-w-[400px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-dashed border-cyan-200/[0.08]" />
+    <footer id="contact" className="relative min-h-screen overflow-hidden border-t border-white/10 bg-transparent px-5 pb-8 pt-32 md:px-10 md:pt-48">
       <div className="relative mx-auto flex min-h-[calc(100vh-13rem)] max-w-7xl flex-col">
         <div className="mx-auto flex max-w-6xl flex-1 flex-col items-center justify-center text-center">
-          <p className="font-mono text-sm tracking-[0.18em] text-cyan-200/70">AVAILABLE FOR INTERNSHIPS</p>
-          <h2 className="mt-7 text-[clamp(4.4rem,13vw,13rem)] font-medium leading-[0.76] tracking-[-0.075em]">
-            LET&apos;S
-            <span className="block text-white/24">BUILD.</span>
-          </h2>
-          <motion.a
-            whileHover={{ scale: 1.045 }}
-            whileTap={{ scale: 0.97 }}
-            href="mailto:hello@linshu.dev"
-            className="group mt-12 flex items-center gap-4 rounded-full bg-white px-7 py-4 text-sm font-semibold text-black"
+          <p className="font-mono text-sm tracking-[0.18em] text-white/60">{content.footerKicker}</p>
+          <InlineTextReveal
+            as="h2"
+            className="mt-7 w-full"
+            textClassName="justify-center text-[clamp(4.4rem,13vw,13rem)] font-medium leading-[0.76] tracking-[-0.075em]"
+            mutedClassName="text-white/16"
           >
-            hello@linshu.dev
-            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-          </motion.a>
+            {"LET'S\nBUILD."}
+          </InlineTextReveal>
+          <motion.div whileHover={{ scale: 1.045 }} whileTap={{ scale: 0.97 }} className="mt-12">
+            <LiquidMetalLink href="mailto:CST2409040@xmu.edu.my" className="group min-w-[260px]">
+              CST2409040@xmu.edu.my
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </LiquidMetalLink>
+          </motion.div>
         </div>
         <div className="flex flex-col gap-6 border-t border-white/10 pt-7 text-sm text-white/38 sm:flex-row sm:items-center sm:justify-between">
-          <p>林述 / 计算机科学学生</p>
           <div className="flex gap-5">
-            <a href="https://github.com/" target="_blank" rel="noreferrer" className="flex items-center gap-2 transition-colors hover:text-white">
+            <a href="https://github.com/desperati0n" target="_blank" rel="noreferrer" className="flex items-center gap-2 transition-colors hover:text-white">
               <Code2 className="h-4 w-4" /> GitHub
             </a>
-            <a href="#home" className="transition-colors hover:text-white">回到顶部</a>
+            <a href="#home" className="transition-colors hover:text-white">{content.backToTop}</a>
           </div>
           <p>© 2026</p>
         </div>
@@ -557,7 +529,8 @@ function MotionFooter() {
   );
 }
 
-export function PortfolioPage() {
+export function PortfolioPage({ locale = 'en' }: { locale?: PortfolioLocale }) {
+  const content = siteContent[locale];
   const main = useRef<HTMLElement>(null);
 
   useGSAP(
@@ -581,47 +554,50 @@ export function PortfolioPage() {
   );
 
   return (
-    <main ref={main} className="w-full max-w-full overflow-x-hidden bg-black text-white">
-      <TubeLightNav />
-      <section id="home" className="relative flex min-h-screen items-center justify-center overflow-hidden px-5 pb-24 pt-32 sm:px-10">
-        <div className="ambient-grid absolute inset-0" />
-        <div className="absolute left-1/2 top-1/4 h-[38rem] w-[38rem] -translate-x-1/2 rounded-full bg-cyan-400/[0.055] blur-[110px]" />
-        <CursorField />
-
-        <div className="relative z-10 mx-auto flex w-full max-w-6xl -translate-y-16 flex-col items-center text-center">
-          <motion.p initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.65 }} className="mb-7 font-mono text-sm tracking-[0.22em] text-cyan-200/80">
-            CS STUDENT / CREATIVE DEVELOPER
-          </motion.p>
-          <motion.h1
-            initial={{ opacity: 0, y: 40, filter: 'blur(12px)' }}
-            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-            transition={{ duration: 1, delay: 0.2, ease: [0.2, 0.8, 0.2, 1] }}
-            className="w-full max-w-6xl text-balance text-[clamp(3.35rem,8.4vw,8rem)] font-medium leading-[0.88] tracking-[-0.065em]"
+    <main lang={locale === 'en' ? 'en' : 'zh-CN'} ref={main} className="relative isolate w-full max-w-full overflow-x-hidden bg-black text-white">
+      <DocumentLanguage lang={locale === 'en' ? 'en' : 'zh-CN'} />
+      <ParticlesBackground className="pointer-events-none fixed inset-0 z-0 h-screen w-full overflow-hidden" />
+      <PortfolioDock locale={locale} />
+      <section id="home" className="relative z-10 flex min-h-screen items-center justify-center overflow-hidden bg-black px-5 pb-24 pt-32 sm:px-10">
+        <ShaderBackground className="absolute inset-0 h-full w-full opacity-80" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_32%,rgba(0,0,0,.22),rgba(0,0,0,.58)_72%,#000_100%)]" />
+        <div className="ambient-grid absolute inset-0 opacity-35 mix-blend-overlay" />
+        <div className="absolute left-1/2 top-1/4 h-[38rem] w-[38rem] -translate-x-1/2 rounded-full bg-white/[0.025] blur-[110px]" />
+        <div className="relative z-10 mx-auto flex w-full max-w-6xl -translate-y-10 flex-col items-center text-center">
+          <InlineTextReveal
+            as="h1"
+            className="w-full max-w-6xl"
+            textClassName="justify-center text-balance text-[clamp(3.35rem,8.4vw,8rem)] font-medium leading-[0.88] tracking-[-0.065em]"
+            mutedClassName="text-white/18"
           >
-            构建有思想的代码
-            <span className="block text-white/35">与有温度的体验。</span>
-          </motion.h1>
-          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.95 }} className="mt-8 max-w-xl text-base leading-relaxed text-white/55 sm:text-lg">
-            我是林述，一名计算机科学学生，关注人机交互、Web 工程与生成式 AI。
+            {content.heroTitle}
+          </InlineTextReveal>
+          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.95 }} className="mt-7 max-w-lg text-sm leading-relaxed text-white/55 sm:text-base">
+            {content.heroBody}
           </motion.p>
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.1 }} className="mt-9 flex flex-col gap-3 sm:flex-row">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.1 }}
+            className="mt-14 flex w-full justify-center sm:mt-16"
+          >
             <MagneticLink href="#projects" primary>
-              查看项目
+              {content.projectsCta}
               <ArrowDownRight className="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" />
             </MagneticLink>
-            <MagneticLink href="#contact">与我联系</MagneticLink>
           </motion.div>
         </div>
         <div className="absolute bottom-7 left-1/2 z-10 flex -translate-x-1/2 items-center gap-3 font-mono text-[11px] tracking-[0.18em] text-white/30">
           <span className="h-px w-9 bg-white/20" /> SCROLL TO EXPLORE <span className="h-px w-9 bg-white/20" />
         </div>
       </section>
-      <SkillMarquee />
-      <StorySection />
-      <ProjectsSection />
-      <ExperienceAccordion />
-      <PrinciplesCarousel />
-      <MotionFooter />
+      <div className="relative z-10">
+        <SectionFade />
+        <StorySection locale={locale} />
+        <ProjectsSection locale={locale} />
+        <SkillsCarousel locale={locale} />
+        <MotionFooter locale={locale} />
+      </div>
     </main>
   );
 }

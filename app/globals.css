@@ -38,11 +38,11 @@
   --secondary-foreground: oklch(0.95 0 0);
   --muted: oklch(0.18 0.01 240);
   --muted-foreground: oklch(0.68 0.01 240);
-  --accent: oklch(0.9 0.12 195);
+  --accent: oklch(0.96 0 0);
   --accent-foreground: oklch(0.08 0.008 240);
   --border: oklch(1 0 0 / 12%);
   --input: oklch(1 0 0 / 14%);
-  --ring: oklch(0.86 0.13 195);
+  --ring: oklch(0.82 0 0);
   --radius: 0.875rem;
 }
 
@@ -62,7 +62,7 @@
   }
 
   ::selection {
-    background: rgb(103 232 249 / 25%);
+    background: rgb(255 255 255 / 25%);
     color: white;
   }
 }
@@ -75,17 +75,289 @@
   mask-image: linear-gradient(to bottom, black, transparent 88%);
 }
 
-.hero-machine {
+.liquid-metal-button {
+  position: relative;
+  isolation: isolate;
+  display: inline-block;
+  width: 142px;
+  height: 46px;
+  color: #666;
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1;
+  white-space: nowrap;
   transform-style: preserve-3d;
-  mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+  transition:
+    transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1),
+    width 0.4s ease,
+    height 0.4s ease;
 }
 
-.marquee-track {
-  animation: marquee 28s linear infinite;
+.liquid-metal-button:has(.liquid-metal-button__trigger:focus-visible) {
+  box-shadow: 0 0 0 2px rgb(255 255 255 / 85%), 0 0 0 5px rgb(255 255 255 / 18%);
+  border-radius: 100px;
 }
 
-.marquee-track:hover {
-  animation-play-state: paused;
+.liquid-metal-button[data-disabled] {
+  opacity: 0.5;
+}
+
+.liquid-metal-button--sm {
+  width: 112px;
+  height: 38px;
+  font-size: 0.8rem;
+}
+
+.liquid-metal-button--icon,
+.liquid-metal-button--icon.liquid-metal-button--icon {
+  width: 46px;
+}
+
+.liquid-metal-button--panel {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 150px;
+  border-radius: 1.5rem;
+  text-align: left;
+  white-space: normal;
+  transition:
+    flex 0.7s cubic-bezier(0.2, 0.8, 0.2, 1),
+    transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.liquid-metal-button__perspective,
+.liquid-metal-button__frame {
+  width: 100%;
+  height: 100%;
+}
+
+.liquid-metal-button__perspective {
+  perspective: 1000px;
+  perspective-origin: 50% 50%;
+}
+
+.liquid-metal-button__frame {
+  position: relative;
+  border-radius: inherit;
+  transform-style: preserve-3d;
+  transition:
+    transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1),
+    width 0.4s ease,
+    height 0.4s ease;
+}
+
+.liquid-metal-button__label,
+.liquid-metal-button__surface,
+.liquid-metal-button__metal,
+.liquid-metal-button__trigger {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 100px;
+  transform-style: preserve-3d;
+  transition:
+    transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1),
+    width 0.4s ease,
+    height 0.4s ease,
+    box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.liquid-metal-button__label {
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  color: inherit;
+  text-shadow: 0 1px 2px rgb(0 0 0 / 50%);
+  transform: translateZ(20px);
+  pointer-events: none;
+}
+
+.hero-project-link .liquid-metal-button__label {
+  color: white;
+  text-shadow:
+    0 0 10px rgb(255 255 255 / 78%),
+    0 0 24px rgb(255 255 255 / 36%);
+}
+
+.liquid-metal-button__surface {
+  z-index: 20;
+  transform: translateZ(10px);
+  pointer-events: none;
+}
+
+.liquid-metal-button__surface-inner {
+  width: calc(100% - 4px);
+  height: calc(100% - 4px);
+  margin: 2px;
+  border-radius: 100px;
+  background: linear-gradient(180deg, #202020 0%, #000 100%);
+  transition:
+    width 0.4s ease,
+    height 0.4s ease,
+    box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.liquid-metal-button__metal {
+  z-index: 10;
+  transform: translateZ(0);
+  background: conic-gradient(from 125deg, #111 0deg, #f8f8ff 42deg, #222 88deg, #d8d8df 156deg, #090909 220deg, #eee 292deg, #111 360deg);
+  box-shadow:
+    0 0 0 1px rgb(0 0 0 / 30%),
+    0 36px 14px rgb(0 0 0 / 2%),
+    0 20px 12px rgb(0 0 0 / 8%),
+    0 9px 9px rgb(0 0 0 / 12%),
+    0 2px 5px rgb(0 0 0 / 15%);
+  pointer-events: none;
+}
+
+.liquid-metal-button[data-hovered] .liquid-metal-button__metal {
+  box-shadow:
+    0 0 0 1px rgb(0 0 0 / 40%),
+    0 12px 6px rgb(0 0 0 / 5%),
+    0 8px 5px rgb(0 0 0 / 10%),
+    0 4px 4px rgb(0 0 0 / 15%),
+    0 1px 2px rgb(0 0 0 / 20%);
+}
+
+.liquid-metal-button[data-pressed] .liquid-metal-button__surface-inner {
+  box-shadow: inset 0 2px 4px rgb(0 0 0 / 40%), inset 0 1px 2px rgb(0 0 0 / 30%);
+}
+
+.liquid-metal-button[data-pressed] .liquid-metal-button__surface {
+  transform: translateZ(10px) translateY(1px) scale(0.98);
+}
+
+.liquid-metal-button[data-pressed] .liquid-metal-button__metal {
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 50%), 0 1px 2px rgb(0 0 0 / 30%);
+  transform: translateZ(0) translateY(1px) scale(0.98);
+}
+
+.liquid-metal-button__shader {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+.liquid-metal-button__shader canvas {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  border-radius: 100px !important;
+}
+
+.liquid-metal-button--panel .liquid-metal-button__label,
+.liquid-metal-button--panel .liquid-metal-button__surface,
+.liquid-metal-button--panel .liquid-metal-button__surface-inner,
+.liquid-metal-button--panel .liquid-metal-button__metal,
+.liquid-metal-button--panel .liquid-metal-button__shader,
+.liquid-metal-button--panel .liquid-metal-button__shader canvas,
+.liquid-metal-button--panel .liquid-metal-button__trigger {
+  border-radius: 1.5rem !important;
+}
+
+.liquid-metal-button--panel .liquid-metal-button__label {
+  display: block;
+  padding: 1.75rem;
+  text-align: left;
+}
+
+.liquid-metal-button__trigger {
+  z-index: 40;
+  overflow: hidden;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: transparent;
+  cursor: pointer;
+  outline: none;
+  transform: translateZ(25px);
+  text-decoration: none;
+}
+
+.liquid-metal-button__trigger:disabled {
+  cursor: not-allowed;
+}
+
+.liquid-metal-button__ripple {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgb(255 255 255 / 40%) 0%, rgb(255 255 255 / 0%) 70%);
+  animation: liquid-metal-ripple 0.6s ease-out;
+  transform: translate(-50%, -50%) scale(0);
+}
+
+@keyframes liquid-metal-ripple {
+  to {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(4);
+  }
+}
+
+.chrome-button-ripple {
+  position: absolute;
+  z-index: 20;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgb(255 255 255 / 55%) 0%, rgb(255 255 255 / 0%) 72%);
+  pointer-events: none;
+  animation: chrome-button-ripple 0.6s ease-out forwards;
+  transform: translate(-50%, -50%) scale(0);
+}
+
+.group\/chrome canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+@keyframes chrome-button-ripple {
+  to {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(5);
+  }
+}
+
+@keyframes commit-highlight {
+  from {
+    background-color: rgb(255 255 255 / 4%);
+  }
+
+  to {
+    background-color: var(--highlight);
+  }
+}
+
+@keyframes commit-flash {
+  0%,
+  100% {
+    background-color: rgb(0 0 0 / 35%);
+  }
+
+  50% {
+    background-color: var(--highlight);
+  }
+}
+
+.animate-commit-highlight {
+  animation: commit-highlight 0.6s ease forwards;
+}
+
+.animate-commit-flash {
+  animation: commit-flash 0.6s ease forwards;
 }
 
 .project-card,
@@ -105,39 +377,13 @@
 }
 
 .project-card:hover::after {
-  border-color: rgb(165 243 252 / 25%);
+  border-color: rgb(255 255 255 / 28%);
 }
 
 .experience-panel {
   background:
     linear-gradient(145deg, rgb(255 255 255 / 4%), transparent 60%),
     #08090a;
-}
-
-.footer-orbit::before {
-  position: absolute;
-  top: -5px;
-  left: 50%;
-  width: 10px;
-  height: 10px;
-  border-radius: 999px;
-  background: rgb(165 243 252);
-  box-shadow: 0 0 32px 10px rgb(103 232 249 / 35%);
-  content: '';
-  animation: orbit 18s linear infinite;
-  transform-origin: 0 calc(32.5vw + 5px);
-}
-
-@keyframes marquee {
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-@keyframes orbit {
-  to {
-    transform: rotate(360deg);
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
