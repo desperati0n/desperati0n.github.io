@@ -38,14 +38,20 @@ const projectsZh = [
     title: '企业 IT 运维工单 Agent 与 MCP 平台',
     summary: '面向企业运维流程的异步工单系统，以及可由外部 Agent 安全调用的 MCP 工具平台。',
     visual: {
-      src: '/projects/ticket-service-architecture.svg',
+      src: '/projects/ticket-service-architecture-zh.png',
       alt: '企业 IT 运维工单 Agent 与 MCP 平台总体架构图',
-      caption: '系统架构 / 外部 LLM、MCP、Redis 队列与数据层之间的调用关系',
+      caption: '系统架构 / FastAPI、Redis、Worker、Agent 与数据层之间的任务链路',
       sourceLabel: '查看架构文档',
       sourceHref: 'https://github.com/desperati0n/ticket_service/blob/main/ticket_service_skill/docs/mcp-server.md',
-      imageClassName: 'mx-auto max-h-[46rem] w-auto max-w-full',
+      imageClassName: 'min-w-[80rem] w-full max-w-none',
       dark: true,
       custom: false,
+      secondary: {
+        src: '/projects/ticket-service-sequence-zh.png',
+        alt: '企业 IT 运维工单 Agent 从任务入队到返回结果的时序图',
+        caption: '任务时序 / 从工单入队、Worker 处理、Agent 工具调用到 SSE 返回结果',
+        imageClassName: 'min-w-[60rem] w-full max-w-none',
+      },
     },
     links: [{ label: 'ticket_service', href: 'https://github.com/desperati0n/ticket_service' }],
     facts: [
@@ -61,15 +67,14 @@ const projectsZh = [
     title: 'RAG 文档问答与工具调用 Agent',
     summary: '一个面向多格式知识库的端到端 RAG 实践项目，兼顾召回质量、模型兼容与异常处理。',
     visual: {
-      src: '/projects/rag-agent-architecture.svg',
+      src: '/projects/rag-agent-architecture-zh.png',
       alt: 'RAG 文档问答与工具调用 Agent 系统架构图',
       caption: '系统架构 / 检索、重排、向量数据库、LLM 与本地工具的协作链路',
       sourceLabel: '查看架构文档',
       sourceHref: 'https://github.com/desperati0n/rag-agent-tutorial/blob/main/TECHNICAL.md',
-      imageClassName: 'w-full',
+      imageClassName: 'min-w-[72rem] w-full max-w-none',
       dark: true,
-      custom: true,
-      kind: 'rag',
+      custom: false,
     },
     links: [{ label: 'rag-agent-tutorial', href: 'https://github.com/desperati0n/rag-agent-tutorial' }],
     facts: [
@@ -114,15 +119,20 @@ const projectsEn = [
     title: 'IT Service Desk Agent and MCP Platform',
     summary: 'An asynchronous ticketing system for enterprise IT operations, paired with an MCP tool platform that external agents can call through a controlled interface.',
     visual: {
-      src: '',
+      src: '/projects/ticket-service-architecture-en.png',
       alt: 'Architecture of the IT service desk agent and MCP platform',
       caption: 'System architecture / Request flow across the external LLM, MCP layer, Redis queue, workers, and data stores',
       sourceLabel: 'View architecture docs',
       sourceHref: 'https://github.com/desperati0n/ticket_service/blob/main/ticket_service_skill/docs/mcp-server.md',
-      imageClassName: 'w-full',
+      imageClassName: 'min-w-[80rem] w-full max-w-none',
       dark: true,
-      custom: true,
-      kind: 'ticket',
+      custom: false,
+      secondary: {
+        src: '/projects/ticket-service-sequence-en.png',
+        alt: 'Sequence diagram for the IT service desk agent from task enqueueing to the final SSE response',
+        caption: 'Task sequence / From queueing and worker processing to agent tool calls and the final SSE response',
+        imageClassName: 'min-w-[60rem] w-full max-w-none',
+      },
     },
     links: [{ label: 'ticket_service', href: 'https://github.com/desperati0n/ticket_service' }],
     facts: [
@@ -138,15 +148,14 @@ const projectsEn = [
     title: 'RAG Document Question Answering and Tool-Using Agent',
     summary: 'An end-to-end RAG project for multi-format knowledge bases, designed around retrieval quality, model compatibility, and resilient tool execution.',
     visual: {
-      src: '',
+      src: '/projects/rag-agent-architecture-en.png',
       alt: 'Architecture of the RAG document question-answering and tool-using agent',
       caption: 'System architecture / Retrieval, reranking, vector storage, LLM reasoning, and local tool execution',
       sourceLabel: 'View architecture docs',
       sourceHref: 'https://github.com/desperati0n/rag-agent-tutorial/blob/main/TECHNICAL.md',
-      imageClassName: 'w-full',
+      imageClassName: 'min-w-[72rem] w-full max-w-none',
       dark: true,
-      custom: true,
-      kind: 'rag',
+      custom: false,
     },
     links: [{ label: 'rag-agent-tutorial', href: 'https://github.com/desperati0n/rag-agent-tutorial' }],
     facts: [
@@ -419,7 +428,7 @@ export function ProjectsPageContent({ locale }: { locale: ProjectsLocale }) {
                   </div>
 
                   <figure className="mt-9 overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/[0.035]">
-                    <div className={project.visual.dark ? 'bg-[#0d1117]' : 'bg-[#f4f4f1] p-2 sm:p-4'}>
+                    <div className={`overflow-x-auto ${project.visual.dark ? 'bg-[#0d1117]' : 'bg-[#f4f4f1] p-2 sm:p-4'}`}>
                       {project.visual.custom ? (
                         project.visual.kind === 'ticket'
                           ? <TicketArchitectureDiagram />
@@ -428,6 +437,7 @@ export function ProjectsPageContent({ locale }: { locale: ProjectsLocale }) {
                         <img
                           src={project.visual.src}
                           alt={project.visual.alt}
+                          loading="lazy"
                           className={`block h-auto rounded-xl object-contain ${project.visual.imageClassName} ${project.visual.dark ? 'p-3 sm:p-6' : ''}`}
                         />
                       )}
@@ -444,6 +454,30 @@ export function ProjectsPageContent({ locale }: { locale: ProjectsLocale }) {
                       </a>
                     </figcaption>
                   </figure>
+
+                  {'secondary' in project.visual && project.visual.secondary ? (
+                    <figure className="mt-5 overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/[0.035]">
+                      <div className="overflow-x-auto bg-[#0d1117]">
+                        <img
+                          src={project.visual.secondary.src}
+                          alt={project.visual.secondary.alt}
+                          loading="lazy"
+                          className={`block h-auto rounded-xl object-contain p-3 sm:p-6 ${project.visual.secondary.imageClassName}`}
+                        />
+                      </div>
+                      <figcaption className="flex flex-col gap-3 px-4 py-4 text-xs leading-5 text-white/50 sm:flex-row sm:items-center sm:justify-between sm:px-5">
+                        <span>{project.visual.secondary.caption}</span>
+                        <a
+                          href={project.visual.sourceHref}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex shrink-0 items-center gap-1.5 text-white/65 transition-colors hover:text-white"
+                        >
+                          {project.visual.sourceLabel} <ArrowUpRight className="size-3.5" />
+                        </a>
+                      </figcaption>
+                    </figure>
+                  ) : null}
 
                   <ul className="mt-9 grid gap-5 border-t border-white/10 pt-8 lg:grid-cols-3">
                     {project.facts.map((fact) => (
