@@ -524,7 +524,7 @@ export function GithubProfilePanel({
             {copy.contact}
           </a>
           <div className="mt-4 space-y-2 border-t border-[#21262d] pt-4 text-xs text-[#8c959f]">
-            <p className="flex items-center gap-2"><MapPin className="size-4" /> Xiamen University Malaysia</p>
+            <p className="flex items-center gap-2"><MapPin className="size-4" /> Xiamen University</p>
             <a href="https://github.com/desperati0n" target="_blank" rel="noreferrer" className="flex items-center gap-2 transition-colors hover:text-[#f0f6fc]"><LinkIcon className="size-4" /> github.com/desperati0n</a>
           </div>
         </aside>

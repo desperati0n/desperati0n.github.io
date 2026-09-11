@@ -492,7 +492,7 @@ export function ProjectsPageContent({ locale }: { locale: ProjectsLocale }) {
           ))}
         </section>
 
-        <footer className="mt-20 flex justify-end border-t border-white/10 pt-7 text-sm text-white/40">
+        <footer className="mt-20 flex justify-end pt-7 text-sm text-white/40">
           <a href="mailto:CST2409040@xmu.edu.my" className="transition-colors hover:text-white">CST2409040@xmu.edu.my</a>
         </footer>
       </div>

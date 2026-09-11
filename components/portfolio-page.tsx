@@ -75,8 +75,8 @@ const siteContent = {
       {
         label: 'EDUCATION',
         period: 'SEP 2024 — JUL 2028 (EXPECTED)',
-        title: 'Xiamen University Malaysia',
-        summary: 'Undergraduate Student in Computer Science and Technology, CGPA 3.57 / 4.00; studying in an English-medium programme.',
+        title: 'Xiamen University',
+        summary: 'Undergraduate Student in Computer Science and Technology, CGPA 3.57 / 4.00; IELTS 6.0.',
         icon: GraduationCap,
       },
       {
@@ -90,7 +90,7 @@ const siteContent = {
         label: 'HONOUR',
         period: 'SEP 2025 SEMESTER',
         title: "Dean's List Award",
-        summary: 'School of Computing and Data Science, Xiamen University Malaysia.',
+        summary: 'School of Computing and Data Science, Xiamen University.',
         icon: Award,
       },
     ],
@@ -164,8 +164,8 @@ const siteContent = {
       {
         label: '教育',
         period: '2024.09 — 2028.07（预计）',
-        title: '厦门大学马来西亚分校',
-        summary: '计算机科学与技术本科，CGPA 3.57 / 4.0；全英文授课，IELTS 6.0。',
+        title: '厦门大学',
+        summary: '计算机科学与技术本科，CGPA 3.57 / 4.0；IELTS 6.0。',
         icon: GraduationCap,
       },
       {
@@ -179,7 +179,7 @@ const siteContent = {
         label: '荣誉',
         period: '2025/09 SEMESTER',
         title: "Dean's List Award",
-        summary: '厦门大学马来西亚分校 School of Computing and Data Science。',
+        summary: '厦门大学 School of Computing and Data Science。',
         icon: Award,
       },
     ],
@@ -207,7 +207,7 @@ const siteContent = {
     previous: '上一条',
     next: '下一条',
     heroTitle: '你好，欢迎来到我的个人简介。',
-    heroBody: '钱程，厦门大学马来西亚分校计算机科学本科生。关注 AI Agent、RAG、MCP 与可靠后端系统。',
+    heroBody: '钱程，厦门大学计算机科学本科生。关注 AI Agent、RAG、MCP 与可靠后端系统。',
     projectsCta: '查看项目',
     footerKicker: 'OPEN TO AI & BACKEND INTERNSHIPS',
     backToTop: '回到顶部',
@@ -496,7 +496,7 @@ function SkillsCarousel({ locale }: { locale: PortfolioLocale }) {
 function MotionFooter({ locale }: { locale: PortfolioLocale }) {
   const content = siteContent[locale];
   return (
-    <footer id="contact" className="relative min-h-screen overflow-hidden border-t border-white/10 bg-transparent px-5 pb-8 pt-32 md:px-10 md:pt-48">
+    <footer id="contact" className="relative min-h-screen overflow-hidden bg-transparent px-5 pb-8 pt-32 md:px-10 md:pt-48">
       <div className="relative mx-auto flex min-h-[calc(100vh-13rem)] max-w-7xl flex-col">
         <div className="mx-auto flex max-w-6xl flex-1 flex-col items-center justify-center text-center">
           <p className="font-mono text-sm tracking-[0.18em] text-white/60">{content.footerKicker}</p>
