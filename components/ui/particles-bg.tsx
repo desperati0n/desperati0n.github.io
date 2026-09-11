@@ -36,7 +36,7 @@ export default function ParticlesBackground({ className = '' }: ParticlesBackgro
     destroyParticles();
     window.particlesJS(containerId, {
       particles: {
-        number: { value: 180, density: { enable: true, value_area: 800 } },
+        number: { value: 120, density: { enable: true, value_area: 800 } },
         color: { value: '#ffffff' },
         shape: { type: 'circle', stroke: { width: 0.5, color: '#ffffff' } },
         opacity: { value: 0.48, random: true, anim: { enable: true, speed: 0.7, opacity_min: 0.12 } },
